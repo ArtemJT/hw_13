@@ -1,16 +1,24 @@
 package ua.hillel;
 
+import java.io.FileNotFoundException;
+
 public class Main {
     public static void main(String[] args) {
         String path1 = "./resources";
         String path2 = "./resources/test.dir";
         String path3 = "./resources/test.dir2";
+        String errPath = "./resources/non-existent";
 
         FileNavigator fileNavigator = new FileNavigator();
 
-        fileNavigator.add(path1);
-        fileNavigator.add(path2);
-        fileNavigator.add(path3);
+        try{
+            fileNavigator.add(path1);
+            fileNavigator.add(path2);
+            fileNavigator.add(path3);
+            fileNavigator.add(errPath);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
 
         System.out.println("-----------------");
         System.out.println(fileNavigator.filesMapToString());

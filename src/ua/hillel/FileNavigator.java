@@ -1,6 +1,7 @@
 package ua.hillel;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -8,8 +9,11 @@ public class FileNavigator {
 
     private final Map<String, List<FileData>> filesMap = new HashMap<>();
 
-    public void add(String path) {
+    public void add(String path) throws FileNotFoundException {
         File file = new File(path);
+        if (!file.exists()) {
+            throw new FileNotFoundException("There is no file or directory: " + "'" + path + "'");
+        }
         for (File listFile : Objects.requireNonNull(file.listFiles())) {
             String filePath = listFile.getParent();
             if (!listFile.isDirectory() && !filePath.equals(path)) {
@@ -37,7 +41,7 @@ public class FileNavigator {
     public List<FileData> sortBySize() {
         return filesMap.values().stream()
                 .flatMap(Collection::stream)
-                .sorted(new MyComparator())
+                .sorted(new FileDataBySizeComparator())
                 .collect(Collectors.toList());
     }
 
